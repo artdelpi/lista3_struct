@@ -31,7 +31,6 @@ model Partida {
   data_criacao      DateTime   @default(now())
   
   opcoes_aposta OpcoesAposta[]
-  apostas       Aposta[]
 }
 
 model OpcoesAposta {
@@ -54,7 +53,6 @@ model Aposta {
   status           String   @default("pendente") 
   data_criacao     DateTime @default(now())
   usuario      Usuario      @relation(fields: [usuario_id], references: [id])
-  partida      Partida      @relation(fields: [partida_id], references: [id])
   opcao_aposta OpcoesAposta @relation(fields: [opcao_aposta_id], references: [id])
 }
 
