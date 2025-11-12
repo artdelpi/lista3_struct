@@ -64,7 +64,6 @@ const main = async () => {
   await prisma.aposta.create({
     data: {
       usuario_id: usuario.id,
-      partida_id: partida1.id,
       opcao_aposta_id: opcoesPartida1[0]?.id || 1, // Aposta no time 1 (Bayern)
       valor_apostado: 50.00,
       odds_aposta: 1.45,
