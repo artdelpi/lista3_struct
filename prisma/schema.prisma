@@ -10,9 +10,9 @@ datasource db {
 model Usuario {
   id           Int        @id @default(autoincrement())
   nome_usuario String
-  email        String
+  email        String     @unique
   senha_hash   String
-  saldo        Float      @default(0)
+  saldo        Decimal      @default(0)
   data_criacao DateTime   @default(now())
   
   apostas      Aposta[]
@@ -31,14 +31,13 @@ model Partida {
   data_criacao      DateTime   @default(now())
   
   opcoes_aposta OpcoesAposta[]
-  apostas       Aposta[]
 }
 
 model OpcoesAposta {
   id          Int      @id @default(autoincrement())
   partida_id  Int
   tipo        String   
-  odds        Float
+  odds        Decimal
   data_criacao DateTime @default(now())
   
   partida Partida @relation(fields: [partida_id], references: [id])
@@ -48,15 +47,12 @@ model OpcoesAposta {
 model Aposta {
   id               Int      @id @default(autoincrement())
   usuario_id       Int
-  partida_id       Int
   opcao_aposta_id  Int
-  valor_apostado   Float
-  odds_aposta      Float
+  valor_apostado   Decimal
+  odds_aposta      Decimal
   status           String   @default("pendente") 
   data_criacao     DateTime @default(now())
-  
   usuario      Usuario      @relation(fields: [usuario_id], references: [id])
-  partida      Partida      @relation(fields: [partida_id], references: [id])
   opcao_aposta OpcoesAposta @relation(fields: [opcao_aposta_id], references: [id])
 }
 
@@ -64,7 +60,7 @@ model Transacao {
   id           Int      @id @default(autoincrement())
   usuario_id   Int
   tipo         String   
-  valor        Float
+  valor        Decimal
   descricao    String?
   data_criacao DateTime @default(now())
   
