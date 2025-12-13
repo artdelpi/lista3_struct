@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 type MeResponse =
   | { user: null }
-  | { user: { id: number; nome_usuario: string; email: string } };
+  | { user: { id: number; nome_usuario: string; email: string; saldo: number } };
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -15,7 +15,7 @@ export default function Navbar() {
 
   useEffect(() => {
     void (async () => {
-      const res = await fetch("/api/auth/me", { cache: "no-store" });
+      const res = await fetch("/api/auth/user", { cache: "no-store" });
       const data = (await res.json()) as MeResponse;
       setMe(data);
     })();
@@ -64,9 +64,14 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               {user ? (
                 <>
-                  <span className="text-sm text-zinc-300">
-                    Olá, <b className="text-white">{user.nome_usuario}</b>
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span className="text-sm text-zinc-300">
+                      Olá, <b className="text-white">{user.nome_usuario}</b>
+                    </span>
+                    <span className="text-xs text-fuchsia-400 font-semibold">
+                      R$ {(Number(user.saldo) || 0).toFixed(2)}
+                    </span>
+                  </div>
 
                   <button
                     onClick={handleLogout}

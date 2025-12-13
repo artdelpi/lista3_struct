@@ -9,11 +9,18 @@ export async function GET(req: Request) {
     return NextResponse.json({ user: null });
   }
 
+  // Buscar o saldo do usuário no banco
+  const usuario = await db.usuario.findUnique({
+    where: { id: session.user.id },
+    select: { saldo: true },
+  });
+
   return NextResponse.json({
     user: {
       id: session.user.id,
       nome_usuario: session.user.nome_usuario,
       email: session.user.email,
+      saldo: usuario?.saldo ?? 0,
     },
   });
 }
