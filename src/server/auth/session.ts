@@ -7,6 +7,8 @@ const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
 type SessionPayload = {
   uid: number;
+  nome_usuario?: string;  
+  saldo?: number;         
   exp: number; // unix seconds
 };
 
@@ -47,11 +49,36 @@ function timingSafeEq(a: string, b: string): boolean {
   return crypto.timingSafeEqual(ab, bb);
 }
 
-export function createSessionToken(userId: number): string {
+export async function createSessionToken(userId: number, db?: PrismaClient): Promise<string> {
+  let nome_usuario: string | undefined;
+  let saldo: number | undefined;
+
+  console.log('🔧 createSessionToken chamado para userId:', userId);
+
+  // Se db for fornecido, busca dados do usuário
+  if (db) {
+    try {
+      const user = await db.usuario.findUnique({
+        where: { id: userId },
+        select: { nome_usuario: true, saldo: true }
+      });
+      
+      if (user) {
+        nome_usuario = user.nome_usuario;
+        saldo = parseFloat(user.saldo.toString());
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados do usuário:', error);
+    }
+  }
+
   const payload: SessionPayload = {
     uid: userId,
+    nome_usuario,  // ← Inclui nome se disponível
+    saldo,         // ← Inclui saldo se disponível
     exp: Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS,
   };
+  
   const payloadPart = b64urlEncode(Buffer.from(JSON.stringify(payload), "utf8"));
   const sig = sign(payloadPart);
   return `${payloadPart}.${sig}`;

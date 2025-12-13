@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
+import { cookies } from "next/headers";
 import { db } from "@/server/db";
 import { createSessionToken, getSessionCookieName } from "@/server/auth/session";
 
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Credenciais inválidas." }, { status: 401 });
   }
 
-  const token = createSessionToken(user.id);
+  const token = await createSessionToken(user.id, db);
 
   const res = NextResponse.json({ ok: true });
   res.cookies.set(getSessionCookieName(), token, {
