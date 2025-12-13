@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { refetch } = useAuth();
   const [email, setEmail] = useState("arthur_nlsa@gmail.com");
   const [senha, setSenha] = useState("1234567");
   const [err, setErr] = useState<string | null>(null);
@@ -29,7 +31,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.refresh();
+    await refetch();
     router.push("/");
   }
 

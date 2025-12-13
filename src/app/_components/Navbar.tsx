@@ -1,33 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-type MeResponse =
-  | { user: null }
-  | { user: { id: number; nome_usuario: string; email: string; saldo: number; is_admin: boolean } };
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [me, setMe] = useState<MeResponse | null>(null);
+  const { user, refetch } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    void (async () => {
-      const res = await fetch("/api/auth/user", { cache: "no-store" });
-      const data = (await res.json()) as MeResponse;
-      setMe(data);
-    })();
-  }, []);
-
-  const user = me?.user ?? null;
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    setMe({ user: null });
+    await refetch();
     setOpen(false);
-    router.refresh();
     router.push("/");
   }
 
