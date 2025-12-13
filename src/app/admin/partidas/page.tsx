@@ -19,11 +19,24 @@ export default function AdminPartidasPage() {
     onSuccess: async () => utils.partida.listWithOpcoes.invalidate(),
   });
 
+  const createOpcao = api.opcoesAposta.create.useMutation({
+    onSuccess: async () => utils.partida.listWithOpcoes.invalidate(),
+  });
+
+  const removeOpcao = api.opcoesAposta.remove.useMutation({
+    onSuccess: async () => utils.partida.listWithOpcoes.invalidate(),
+  });
+
   const [form, setForm] = useState({
     time_casa: "",
     time_visitante: "",
     status: "agendada",
     data_partida: new Date().toISOString().slice(0, 16),
+  });
+
+  const [opcaoForm, setOpcaoForm] = useState({
+    tipo: "1",
+    odds: "1.90",
   });
 
   return (
@@ -125,16 +138,53 @@ export default function AdminPartidasPage() {
               </div>
 
               <div className="text-sm text-zinc-300">
-                <div className="font-semibold mb-1">Opções de aposta</div>
-                <div className="flex flex-wrap gap-2">
+                <div className="font-semibold mb-2">Opções de aposta</div>
+                <div className="flex flex-wrap gap-2 mb-3">
                   {p.opcoes_aposta.map((o) => (
-                    <span
-                      key={o.id}
-                      className="rounded-full border border-zinc-700 px-3 py-1 text-xs"
-                    >
-                      {o.tipo}: {String(o.odds)}
-                    </span>
+                    <div key={o.id} className="flex items-center gap-2 rounded-full border border-zinc-700 px-3 py-1 text-xs">
+                      <span>{o.tipo}: {String(o.odds)}</span>
+                      <button
+                        onClick={() => removeOpcao.mutate({ id: o.id })}
+                        className="text-red-400 hover:text-red-500 font-bold ml-1"
+                      >
+                        ✕
+                      </button>
+                    </div>
                   ))}
+                </div>
+
+                <div className="flex gap-2">
+                  <select
+                    className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs"
+                    value={opcaoForm.tipo}
+                    onChange={(e) => setOpcaoForm((prev) => ({ ...prev, tipo: e.target.value }))}
+                  >
+                    <option value="1">Vitória 1</option>
+                    <option value="X">Empate</option>
+                    <option value="2">Vitória 2</option>
+                  </select>
+                  <input
+                    type="number"
+                    className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs w-20"
+                    placeholder="Odds"
+                    value={opcaoForm.odds}
+                    onChange={(e) => setOpcaoForm((prev) => ({ ...prev, odds: e.target.value }))}
+                    step="0.01"
+                    min="1"
+                  />
+                  <button
+                    onClick={() =>
+                      createOpcao.mutate({
+                        partida_id: p.id,
+                        tipo: opcaoForm.tipo,
+                        odds: opcaoForm.odds,
+                      })
+                    }
+                    disabled={createOpcao.isPending}
+                    className="rounded-lg bg-green-600 px-3 py-2 text-xs font-bold hover:bg-green-700 disabled:opacity-60"
+                  >
+                    {createOpcao.isPending ? "..." : "+"}
+                  </button>
                 </div>
               </div>
             </div>

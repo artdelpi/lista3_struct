@@ -1,10 +1,38 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
+import { useEffect, useState } from "react";
+
 export default function Home() {
-  const events = [
-    { slug: "final-brasileirao", title: "Final do Brasileirão", tag: "Futebol", teams: ["Flamengo", "Palmeiras"] },
-    { slug: "classico-nacional", title: "Clássico Nacional", tag: "Futebol", teams: ["Corinthians", "São Paulo"] },
-    { slug: "basquete-jogo-7", title: "NBA Finals - Game 7", tag: "Basquete", teams: ["Lakers", "Celtics"] },
-    { slug: "csgo-grand-final", title: "CS:GO Major Final", tag: "eSports", teams: ["Team A", "Team B"] },
-  ];
+  const { data: partidas = [] } = api.partida.listWithOpcoes.useQuery({ take: 4 });
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Verifica se está logado checando se tem um usuário na sessão
+    fetch("/api/auth/session")
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoggedIn(!!data?.user);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleApostaClick = (e: React.MouseEvent, opcaoId: number) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      router.push("/login");
+      return;
+    }
+    // Se logado, deixa o Link fazer seu trabalho normalmente
+  };
 
   const features = [
     { 
@@ -82,48 +110,49 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {events.map((event) => (
+          {partidas.map((partida) => (
             <div
-              key={event.slug}
+              key={partida.id}
               className="group rounded-2xl border border-zinc-800 bg-zinc-900/30 p-6 transition-all duration-300 hover:border-fuchsia-500/50 hover:bg-zinc-900/50 hover:transform hover:scale-105 cursor-pointer"
             >
               {/* Event Header */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="rounded-full bg-fuchsia-500/10 px-3 py-1 text-xs font-medium text-fuchsia-400 border border-fuchsia-500/20">
-                    {event.tag}
+                    Futebol
                   </span>
-                  <div className="text-xs text-zinc-500">AO VIVO</div>
+                  <div className="text-xs text-zinc-500">{partida.status.toUpperCase()}</div>
                 </div>
                 
                 <h3 className="font-bold text-lg group-hover:text-fuchsia-300 transition-colors mb-3">
-                  {event.title}
+                  {partida.time_casa} vs {partida.time_visitante}
                 </h3>
                 
                 {/* Teams */}
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between items-center">
-                    <span>{event.teams[0]}</span>
-                    <span className="font-bold text-fuchsia-400">1.90</span>
+                    <span>{partida.time_casa}</span>
+                    <span className="font-bold text-fuchsia-400">{partida.opcoes_aposta[0]?.odds || "N/A"}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>{event.teams[1]}</span>
-                    <span className="font-bold text-fuchsia-400">2.05</span>
+                    <span>{partida.time_visitante}</span>
+                    <span className="font-bold text-fuchsia-400">{partida.opcoes_aposta[1]?.odds || "N/A"}</span>
                   </div>
                 </div>
               </div>
 
               {/* Odds */}
               <div className="flex gap-2 pt-4 border-t border-zinc-800">
-                <span className="flex-1 text-center rounded-lg bg-zinc-800 py-2 text-sm font-medium hover:bg-fuchsia-500 hover:text-white transition-colors">
-                  1
-                </span>
-                <span className="flex-1 text-center rounded-lg bg-zinc-800 py-2 text-sm font-medium hover:bg-fuchsia-500 hover:text-white transition-colors">
-                  X
-                </span>
-                <span className="flex-1 text-center rounded-lg bg-zinc-800 py-2 text-sm font-medium hover:bg-fuchsia-500 hover:text-white transition-colors">
-                  2
-                </span>
+                {partida.opcoes_aposta.map((opcao) => (
+                  <Link
+                    key={opcao.id}
+                    href={`/aposta/${opcao.id}`}
+                    onClick={(e) => handleApostaClick(e, opcao.id)}
+                    className="flex-1 text-center rounded-lg bg-zinc-800 py-2 text-sm font-medium hover:bg-fuchsia-500 hover:text-white transition-colors"
+                  >
+                    {parseFloat(opcao.odds.toString()).toFixed(2)}
+                  </Link>
+                ))}
               </div>
             </div>
           ))}

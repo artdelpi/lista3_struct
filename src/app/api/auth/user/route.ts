@@ -9,10 +9,10 @@ export async function GET(req: Request) {
     return NextResponse.json({ user: null });
   }
 
-  // Buscar o saldo do usuário no banco
+  // Buscar o saldo e is_admin do usuário no banco
   const usuario = await db.usuario.findUnique({
     where: { id: session.user.id },
-    select: { saldo: true },
+    select: { saldo: true, is_admin: true },
   });
 
   return NextResponse.json({
@@ -21,6 +21,7 @@ export async function GET(req: Request) {
       nome_usuario: session.user.nome_usuario,
       email: session.user.email,
       saldo: usuario?.saldo ?? 0,
+      is_admin: usuario?.is_admin ?? false,
     },
   });
 }

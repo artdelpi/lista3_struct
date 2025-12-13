@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 type MeResponse =
   | { user: null }
-  | { user: { id: number; nome_usuario: string; email: string; saldo: number } };
+  | { user: { id: number; nome_usuario: string; email: string; saldo: number; is_admin: boolean } };
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -61,6 +61,16 @@ export default function Navbar() {
                 <Link href="/minhas-apostas" className="font-medium hover:text-fuchsia-400 transition-colors">
                   Minhas Apostas
                 </Link>
+              )}
+              {user?.is_admin && (
+                <>
+                  <Link href="/admin/partidas" className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
+                    ⚙️ Admin
+                  </Link>
+                  <Link href="/usuarios" className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
+                    👥 Usuários
+                  </Link>
+                </>
               )}
             </div>
 
@@ -136,6 +146,16 @@ export default function Navbar() {
                 <Link href="/minhas-apostas" className="py-3 px-4 rounded-lg hover:bg-zinc-800 transition-colors font-medium" onClick={() => setOpen(false)}>
                   Minhas Apostas
                 </Link>
+              )}
+              {user?.is_admin && (
+                <>
+                  <Link href="/admin/partidas" className="py-3 px-4 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 transition-colors font-medium" onClick={() => setOpen(false)}>
+                    ⚙️ Admin - Partidas
+                  </Link>
+                  <Link href="/usuarios" className="py-3 px-4 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 transition-colors font-medium" onClick={() => setOpen(false)}>
+                    👥 Usuários
+                  </Link>
+                </>
               )}
 
               <div className="border-t border-zinc-800 pt-4 mt-2">

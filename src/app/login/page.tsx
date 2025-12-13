@@ -5,8 +5,8 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState("arthur_nlsa@gmail.com");
+  const [senha, setSenha] = useState("1234567");
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
