@@ -1,8 +1,8 @@
 export default function PromotionsPage() {
   return (
-    <div className="min-h-screen text-white flex h-full">
-      {/* Sidebar simplificada */}
-      <div className="w-64 bg-zinc-950 h-screen overflow-y-auto p-4 sidebar-scrollbar">
+    <div className="min-h-screen text-white flex flex-col md:flex-row">
+      {/* Sidebar - hidden no mobile, visível no desktop */}
+      <div className="hidden md:block md:w-64 bg-zinc-950 min-h-screen overflow-y-auto p-4 sidebar-scrollbar">
         
 
         {/* Seção EM ALTA */}
@@ -113,78 +113,84 @@ export default function PromotionsPage() {
       </div>
 
       {/* Conteúdo principal das promoções */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 md:p-6 w-full">
         
-        <h1 className="text-gray-400 text-2xl font-bold mb-3 w-full pb-3">Promoções</h1>
-        
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center mb-8">
-          {/* Seus cards de promoção aqui */}
-          <div className="rounded-3xl border border-zinc-700 w-1/2 h-full min-h-[350px] flex flex-col items-center justify-center text-center relative overflow-hidden">
+        {/* Banner simples indicando que a página está em desenvolvimento */}
+        <div className="mb-6">
+          <div className="rounded-lg border border-yellow-800 bg-yellow-900/10 text-yellow-300 px-4 py-3 text-center font-semibold">
+            Em construção — funcionalidades em desenvolvimento
+          </div>
+        </div>
+
+        <h1 className="text-gray-400 text-2xl font-bold mb-6 w-full pb-3">Promoções</h1>
+
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-stretch mb-8">
+          {/* Card 1 */}
+          <div className="rounded-3xl border border-zinc-700 w-full md:w-1/2 h-48 md:h-96 flex flex-col items-center justify-center text-center relative overflow-hidden">
             <img 
               src="/images/tenis.jpg" 
-              alt="Descrição" 
+              alt="Aposta Grátis" 
               className="absolute inset-0 w-full h-full object-cover filter grayscale"
             />
             {/* Gradiente sobre a imagem */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-400 via-gray-700 to-black opacity-70 mix-blend-multiply"></div>
 
-            <h3 className="font-bold pt-10 z-10">Aposta grátis de R$50 para novos usuários</h3>
-            <p className="text-sm text-gray-400 z-10 pb-10">3 apostas grátis ao fazer cadastro</p>
+            <h3 className="font-bold text-lg md:text-xl z-10">Aposta grátis de R$50</h3>
+            <p className="text-xs md:text-sm text-gray-400 z-10">3 apostas ao cadastro</p>
 
-            <button className="absolute top-5/8 left-1/2 transform -translate-x-1/2 z-20 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-600 px-8 py-4 font-bold text-white hover:from-fuchsia-600 hover:to-purple-700
-             transition-all duration-200 transform hover:scale-105 shadow-lg shadow-fuchsia-500/25 cursor-pointer">
+            <button className="absolute z-20 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-600 px-6 md:px-8 py-2 md:py-4 font-bold text-sm md:text-base text-white hover:from-fuchsia-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg shadow-fuchsia-500/25 cursor-pointer">
               Participar
             </button>
           </div>
 
-          <div className="rounded-3xl border border-zinc-700 w-1/2 h-full min-h-[350px] flex flex-col items-center justify-center text-center relative overflow-hidden">
+          {/* Card 2 */}
+          <div className="rounded-3xl border border-zinc-700 w-full md:w-1/2 h-48 md:h-96 flex flex-col items-center justify-center text-center relative overflow-hidden">
             <img 
               src="/images/luta.jpg" 
-              alt="Descrição" 
+              alt="Cashback" 
               className="absolute inset-0 w-full h-full object-cover filter grayscale"
             />
             {/* Gradiente sobre a imagem */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-400 via-gray-700 to-black opacity-70 mix-blend-multiply"></div>
 
-            <h3 className="font-bold pt-10 z-10">Cashback de 10% toda semana</h3>
-            <p className="text-sm text-gray-400 z-10 pb-10">Perdeu? Devolvemos 50% em créditos</p>
+            <h3 className="font-bold text-lg md:text-xl z-10">Cashback de 10%</h3>
+            <p className="text-xs md:text-sm text-gray-400 z-10">Toda semana</p>
 
-            <button className="absolute top-5/8 left-1/2 transform -translate-x-1/2 z-20 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-600 px-8 py-4 font-bold text-white hover:from-fuchsia-600 hover:to-purple-700
-             transition-all duration-200 transform hover:scale-105 shadow-lg shadow-fuchsia-500/25 cursor-pointer">
+            <button className="absolute z-20 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-600 px-6 md:px-8 py-2 md:py-4 font-bold text-sm md:text-base text-white hover:from-fuchsia-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg shadow-fuchsia-500/25 cursor-pointer">
               Participar
             </button>
           </div>
         </div>
 
-        {/* Outra linha de promoção - CORREÇÃO DEFINITIVA */}
-        <div className="rounded-3xl border border-zinc-700 p-12 w-full min-h-[500px] flex flex-col justify-center items-center relative overflow-hidden">
+        {/* Card de Ofertas de Pagamento Antecipado */}
+        <div className="rounded-3xl border border-zinc-700 p-6 md:p-12 w-full min-h-80 md:min-h-96 flex flex-col justify-center items-center relative overflow-hidden">
             <img 
               src="/images/chute.png" 
-              alt="Descrição" 
+              alt="Ofertas" 
               className="absolute inset-0 w-full h-full object-cover filter grayscale"
             />
-            {/* Gradiente sobre a imagem - CORREÇÃO RADICAL */}
+            {/* Gradiente sobre a imagem */}
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-gray-400 via-gray-700 to-black opacity-80"></div>
   
           <div className="space-y-4 text-center relative z-10 w-full">
-            <h3 className="font-bold text-xl">Ofertas de Pagamento Antecipado!</h3>
-            <p className="text-sm text-gray-300">Disponíveis em uma variedade de esportes!</p>
+            <h3 className="font-bold text-lg md:text-2xl">Ofertas de Pagamento Antecipado!</h3>
+            <p className="text-xs md:text-sm text-gray-300">Disponíveis em uma variedade de esportes!</p>
             
-            <div className="flex justify-center gap-4 mt-8">
-              <div className="rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-6 w-1/4 min-h-[120px] min-w-[120px] flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
-                <h3 className="font-bold">Futebol</h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mt-6 md:mt-8 px-2 md:px-0">
+              <div className="rounded-2xl md:rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-4 md:p-6 flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
+                <h3 className="font-bold text-sm md:text-base">Futebol</h3>
               </div>
-              <div className="rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-6 w-1/4 min-h-[120px] min-w-[120px] flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
-                <h3 className="font-bold">NBA</h3>
+              <div className="rounded-2xl md:rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-4 md:p-6 flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
+                <h3 className="font-bold text-sm md:text-base">NBA</h3>
               </div>
-              <div className="rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-6 w-1/4 min-h-[120px] min-w-[120px] flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
-                <h3 className="font-bold">NFL</h3>
+              <div className="rounded-2xl md:rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-4 md:p-6 flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
+                <h3 className="font-bold text-sm md:text-base">NFL</h3>
               </div>
-              <div className="rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-6 w-1/4 min-h-[120px] min-w-[120px] flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
-                <h3 className="font-bold">Basquete</h3>
+              <div className="rounded-2xl md:rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-4 md:p-6 flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
+                <h3 className="font-bold text-sm md:text-base">Basquete</h3>
               </div>
-              <div className="rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-6 w-1/4 min-h-[120px] min-w-[120px] flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
-                <h3 className="font-bold">Beisebol</h3>
+              <div className="rounded-2xl md:rounded-3xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 p-4 md:p-6 flex items-center justify-center hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all duration-200 cursor-pointer">
+                <h3 className="font-bold text-sm md:text-base">Beisebol</h3>
               </div>
             </div>
           </div>

@@ -1,30 +1,63 @@
+// src/trpc/server.ts - VERSÃO CORRIGIDA
 import "server-only";
 
-import { createHydrationHelpers } from "@trpc/react-query/rsc";
 import { headers } from "next/headers";
 import { cache } from "react";
 
-import { createCaller, type AppRouter } from "@/server/api/root";
+import { appRouter } from "@/server/api/root"; // ← Importe appRouter
 import { createTRPCContext } from "@/server/api/trpc";
-import { createQueryClient } from "./query-client";
 
 /**
- * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
- * handling a tRPC call from a React Server Component.
+ * Contexto cacheado para performance
  */
 const createContext = cache(async () => {
   const heads = new Headers(await headers());
   heads.set("x-trpc-source", "rsc");
-
   return createTRPCContext({
     headers: heads,
   });
 });
 
-const getQueryClient = cache(createQueryClient);
-const caller = createCaller(createContext);
+/**
+ * Exporte o caller como uma Promise que resolve para o caller
+ */
+export async function getCaller() {
+  const ctx = await createContext();
+  return appRouter.createCaller(ctx);
+}
 
-export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
-  caller,
-  getQueryClient,
-);
+/**
+ * API simplificada para uso direto
+ */
+export const api = {
+  partida: {
+    listWithOpcoes: async (input?: { status?: string; take?: number }) => {
+      const caller = await getCaller();
+      return caller.partida.listWithOpcoes(input);
+    },
+    byId: async (input: { id: number }) => {
+      const caller = await getCaller();
+      return caller.partida.byId(input);
+    },
+  },
+  opcoesAposta: {
+    byId: async (input: { id: number }) => {
+      const caller = await getCaller();
+      return caller.opcoesAposta.byId(input);
+    },
+  },
+  aposta: {
+    create: async (input: { 
+      opcao_aposta_id: number; 
+      valor_apostado: number | string; 
+      odds_aposta: number | string;
+    }) => {
+      const caller = await getCaller();
+      return caller.aposta.create(input);
+    },
+    minhasApostas: async () => {
+      const caller = await getCaller();
+      return caller.aposta.minhasApostas();
+    },
+  },
+};

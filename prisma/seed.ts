@@ -24,7 +24,7 @@ const main = async () => {
       email: "admin@gmail.com",
       senha_hash: hashPassword("admin"),
       is_admin: true,
-      saldo: 0.0,
+      saldo: 1000.0,
     },
   });
 

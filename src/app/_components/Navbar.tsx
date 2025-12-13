@@ -1,33 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-type MeResponse =
-  | { user: null }
-  | { user: { id: number; nome_usuario: string; email: string } };
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [me, setMe] = useState<MeResponse | null>(null);
+  const { user, refetch } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    void (async () => {
-      const res = await fetch("/api/auth/me", { cache: "no-store" });
-      const data = (await res.json()) as MeResponse;
-      setMe(data);
-    })();
-  }, []);
-
-  const user = me?.user ?? null;
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    setMe({ user: null });
+    await refetch();
     setOpen(false);
-    router.refresh();
     router.push("/");
   }
 
@@ -57,6 +43,21 @@ export default function Navbar() {
               <Link href="/promotions" className="font-medium hover:text-fuchsia-400 transition-colors">
                 Promoções
               </Link>
+              {user && (
+                <Link href="/minhas-apostas" className="font-medium hover:text-fuchsia-400 transition-colors">
+                  Minhas Apostas
+                </Link>
+              )}
+              {user?.is_admin && (
+                <>
+                  <Link href="/admin/partidas" className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
+                    ⚙️ Admin
+                  </Link>
+                  <Link href="/usuarios" className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
+                    👥 Usuários
+                  </Link>
+                </>
+              )}
             </div>
 
             <div className="h-6 w-px bg-zinc-700"></div>
@@ -64,9 +65,14 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               {user ? (
                 <>
-                  <span className="text-sm text-zinc-300">
-                    Olá, <b className="text-white">{user.nome_usuario}</b>
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span className="text-sm text-zinc-300">
+                      Olá, <b className="text-white">{user.nome_usuario}</b>
+                    </span>
+                    <span className="text-xs text-fuchsia-400 font-semibold">
+                      R$ {(Number(user.saldo) || 0).toFixed(2)}
+                    </span>
+                  </div>
 
                   <button
                     onClick={handleLogout}
@@ -122,6 +128,21 @@ export default function Navbar() {
               <Link href="/promotions" className="py-3 px-4 rounded-lg hover:bg-zinc-800 transition-colors font-medium" onClick={() => setOpen(false)}>
                 Promoções
               </Link>
+              {user && (
+                <Link href="/minhas-apostas" className="py-3 px-4 rounded-lg hover:bg-zinc-800 transition-colors font-medium" onClick={() => setOpen(false)}>
+                  Minhas Apostas
+                </Link>
+              )}
+              {user?.is_admin && (
+                <>
+                  <Link href="/admin/partidas" className="py-3 px-4 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 transition-colors font-medium" onClick={() => setOpen(false)}>
+                    ⚙️ Admin - Partidas
+                  </Link>
+                  <Link href="/usuarios" className="py-3 px-4 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 transition-colors font-medium" onClick={() => setOpen(false)}>
+                    👥 Usuários
+                  </Link>
+                </>
+              )}
 
               <div className="border-t border-zinc-800 pt-4 mt-2">
                 {user ? (

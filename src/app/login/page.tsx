@@ -2,11 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const { refetch } = useAuth();
+  const [email, setEmail] = useState("arthur_nlsa@gmail.com");
+  const [senha, setSenha] = useState("1234567");
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +31,7 @@ export default function LoginPage() {
       return;
     }
 
+    await refetch();
     router.push("/");
   }
 
