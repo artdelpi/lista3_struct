@@ -115,8 +115,15 @@ export default function PromotionsPage() {
       {/* Conteúdo principal das promoções */}
       <div className="flex-1 p-4 md:p-6 w-full">
         
+        {/* Banner simples indicando que a página está em desenvolvimento */}
+        <div className="mb-6">
+          <div className="rounded-lg border border-yellow-800 bg-yellow-900/10 text-yellow-300 px-4 py-3 text-center font-semibold">
+            Em construção — funcionalidades em desenvolvimento
+          </div>
+        </div>
+
         <h1 className="text-gray-400 text-2xl font-bold mb-6 w-full pb-3">Promoções</h1>
-        
+
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-stretch mb-8">
           {/* Card 1 */}
           <div className="rounded-3xl border border-zinc-700 w-full md:w-1/2 h-48 md:h-96 flex flex-col items-center justify-center text-center relative overflow-hidden">
