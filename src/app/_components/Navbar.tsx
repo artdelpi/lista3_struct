@@ -57,6 +57,11 @@ export default function Navbar() {
               <Link href="/promotions" className="font-medium hover:text-fuchsia-400 transition-colors">
                 Promoções
               </Link>
+              {user && (
+                <Link href="/minhas-apostas" className="font-medium hover:text-fuchsia-400 transition-colors">
+                  Minhas Apostas
+                </Link>
+              )}
             </div>
 
             <div className="h-6 w-px bg-zinc-700"></div>
@@ -127,6 +132,11 @@ export default function Navbar() {
               <Link href="/promotions" className="py-3 px-4 rounded-lg hover:bg-zinc-800 transition-colors font-medium" onClick={() => setOpen(false)}>
                 Promoções
               </Link>
+              {user && (
+                <Link href="/minhas-apostas" className="py-3 px-4 rounded-lg hover:bg-zinc-800 transition-colors font-medium" onClick={() => setOpen(false)}>
+                  Minhas Apostas
+                </Link>
+              )}
 
               <div className="border-t border-zinc-800 pt-4 mt-2">
                 {user ? (
