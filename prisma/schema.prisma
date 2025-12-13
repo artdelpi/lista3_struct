@@ -12,9 +12,9 @@ model Usuario {
   nome_usuario String
   email        String     @unique
   senha_hash   String
-  saldo        Decimal      @default(0)
+  saldo        Decimal    @default(0)
   data_criacao DateTime   @default(now())
-  
+  is_admin     Boolean    @default(false)
   apostas      Aposta[]
   transacoes   Transacao[]
 }
