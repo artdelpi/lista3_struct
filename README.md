@@ -2,17 +2,16 @@
   <img src="https://twemoji.maxcdn.com/v/latest/svg/1f680.svg" width="72" alt="Rocket Emoji">
 </p>
 
-<h1 align="center">Lista 2 • BetComp</h1>
+<h1 align="center">Projeto 3 • BetComp (Struct/UnB)</h1>
 
 <p align="center">
-  <em>Banco de dados de site de apostas — Projeto da Empresa Júnior Struct (UnB)</em>
+  <em>Plataforma de apostas — Projeto final da Empresa Júnior Struct (UnB)</em>
 </p>
 
 <p align="center">
   <a href="#">
-    <img src="https://img.shields.io/badge/status-completed-brightgreen?style=for-the-badge&logo=github" alt="Status">
+    <img src="https://img.shields.io/badge/status-final%20presentation-brightgreen?style=for-the-badge&logo=github" alt="Status">
   </a>
-
   <a href="#">
     <img src="https://img.shields.io/badge/T3%20Stack-6C3EA0?style=for-the-badge" alt="T3 Stack">
   </a>
@@ -22,25 +21,47 @@
 
 ## Visão Geral
 
-Este repositório contém o **Schema de Banco de Dados** (`schema.prisma`) para a plataforma de apostas BetComp, desenvolvido com **Prisma** e usando **SQLite** localmente.
+O **BetComp** é uma plataforma web de apostas desenvolvida como **Projeto 3 da Struct (UnB)**.  
+O sistema reúne **interface responsiva**, **autenticação**, **operações de admin**, **cadastro de partidas/opções** e o **fluxo de apostas do usuário**, incluindo **atualização de saldo** e visualização em **Minhas Apostas**.
 
 ---
 
-## Schema Prisma 
+## Principais Funcionalidades
 
-Abaixo está o print do **`schema.prisma`**, que serviu de base para a criação e população do banco de dados local.
+### Usuário
+- Cadastro e login
+- Explorar/visualizar partidas e eventos
+- Criar apostas
+- Acompanhar apostas em **Minhas Apostas**
+- Visualizar **saldo** (com exibição integrada na navbar)
 
-<p align="center">
-  <img src="public/screenshot_schema_prisma.png" alt="Printscreen do arquivo schema.prisma com todos os modelos">
-</p>
+### Admin
+- Gerenciamento/área administrativa
+- Operações de CRUD para apoiar cadastro/controle de partidas e opções (apoio de rotas/API)
+
+### Páginas / Telas
+- Landing page
+- Promoções (com ajustes para mobile)
+- Ao vivo
+- Login e Registro
+- Minhas Apostas
+- Not Found (404)
 
 ---
 
-## Tecnologias 
+## Back-end e Banco de Dados
 
-- **Prisma ORM**
-- **SQLite**
-- **TypeScript**
+- **Banco de dados** modelado com Prisma (com migrações e seed)
+- **Rotas/APIs** para autenticação e sessão
+- **CRUD** para entidades do domínio (ex.: partidas e opções de aposta)
+- **CRUD de apostas do usuário**, com regra de negócio de **atualização do saldo** ao realizar apostas
+
+---
+
+## Tecnologias
+
+- **T3 Stack** (Next.js + TypeScript + tRPC + Prisma)
+- **SQLite** (ambiente local)
 - **pnpm**
 
 ---
@@ -48,20 +69,21 @@ Abaixo está o print do **`schema.prisma`**, que serviu de base para a criação
 ## Como rodar (passo a passo)
 
 > Requisitos: **Node 18+** e **pnpm** habilitado.
+
 ```bash
-# Clonar e Instalar Dependências
+# Clonar e instalar dependências
 git clone https://github.com/artdelpi/lista2_struct.git
 cd lista2_struct
 pnpm install
 
-# Criar e Aplicar o Schema (Migration)
-# Este comando cria o arquivo SQLite (dev.db) e todas as tabelas.
-npx prisma migrate dev --name init_models
+# Aplicar migrations e criar o banco local
+npx prisma migrate dev
 
-# Popular o Banco de Dados (Seed)
-# Executa o script prisma/seed.ts para inserir os dados iniciais de teste.
+# Popular o banco com dados de teste (seed)
 npx prisma db seed
 
-# Visualizar e Validar os Dados (Prisma Studio)
-# Abre a interface visual em http://localhost:5555.
+# Rodar o projeto
+pnpm dev
+
+# (Opcional) Visualizar dados no Prisma Studio
 npx prisma studio
